@@ -51,12 +51,12 @@ resource "aws_subnet" "swarm_subnet" {
 }
 
 resource "aws_route_table_association" "rt_association_bamboo_subnet" {
-  subnet_id      = "${aws_subnet.bamboo_subnet.id}"
+  subnet_id = "${aws_subnet.bamboo_subnet.id}"
   route_table_id = "${aws_route_table.bamboo_swarm_vpc_rt.id}"
 }
 
 resource "aws_route_table_association" "rt_association_swarm_subnet" {
-  subnet_id      = "${aws_subnet.swarm_subnet.id}"
+  subnet_id = "${aws_subnet.swarm_subnet.id}"
   route_table_id = "${aws_route_table.bamboo_swarm_vpc_rt.id}"
 }
 
@@ -116,4 +116,22 @@ resource "aws_security_group_rule" "allow_egress_allow_all" {
   cidr_blocks = [
     "0.0.0.0/0"
   ]
+}
+
+resource "aws_efs_file_system" "bamboo_home" {
+  performance_mode = "generalPurpose"
+  throughput_mode = "bursting"
+
+  lifecycle_policy {
+    transition_to_ia = "AFTER_14_DAYS"
+  }
+
+  tags = {
+    Name = "Bamboo Home"
+  }
+}
+
+resource "aws_efs_mount_target" "alpha" {
+  file_system_id = "${aws_efs_file_system.bamboo_home.id}"
+  subnet_id = "${aws_subnet.bamboo_subnet.id}"
 }
