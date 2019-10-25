@@ -61,8 +61,8 @@ resource "aws_route_table_association" "rt_association_swarm_subnet" {
 }
 
 resource "aws_security_group" "bamboo_swarm" {
-  name = "Internal Bamboo and Swarm"
-  description = "Allow full connectivity between Bamboo and Swarm hosts"
+  name = "Full internal connectivity"
+  description = "Allow full internal connectivity between instances"
   vpc_id = "${aws_vpc.bamboo_swarm_vpc.id}"
 
   ingress {
@@ -82,13 +82,13 @@ resource "aws_security_group" "bamboo_swarm" {
   }
 
   tags {
-    Name = "Internal Bamboo and Swarm"
+    Name = "Full internal connectivity"
   }
 }
 
-resource "aws_security_group" "bamboo" {
+resource "aws_security_group" "bamboo_http" {
   name = "Bamboo HTTP access"
-  description = "Allows HTTP access to Bamboo"
+  description = "Allow HTTP access to Bamboo"
   vpc_id = "${aws_vpc.bamboo_swarm_vpc.id}"
 
   tags {
@@ -96,8 +96,8 @@ resource "aws_security_group" "bamboo" {
   }
 }
 
-resource "aws_security_group_rule" "allow_ingress_http" {
-  security_group_id = "${aws_security_group.bamboo.id}"
+resource "aws_security_group_rule" "allow_ingress_8085" {
+  security_group_id = "${aws_security_group.bamboo_http.id}"
   type = "ingress"
   from_port = 8085
   to_port = 8085
@@ -107,8 +107,40 @@ resource "aws_security_group_rule" "allow_ingress_http" {
   ]
 }
 
-resource "aws_security_group_rule" "allow_egress_allow_all" {
-  security_group_id = "${aws_security_group.bamboo.id}"
+resource "aws_security_group_rule" "allow_egress_bamboo_http_allow_all" {
+  security_group_id = "${aws_security_group.bamboo_http.id}"
+  type = "egress"
+  from_port = 0
+  to_port = 0
+  protocol = "-1"
+  cidr_blocks = [
+    "0.0.0.0/0"
+  ]
+}
+
+resource "aws_security_group" "ssh" {
+  name = "SSH access"
+  description = "Allow SSH access"
+  vpc_id = "${aws_vpc.bamboo_swarm_vpc.id}"
+
+  tags {
+    Name = "SSH access"
+  }
+}
+
+resource "aws_security_group_rule" "allow_ingress_ssh" {
+  security_group_id = "${aws_security_group.ssh.id}"
+  type = "ingress"
+  from_port = 22
+  to_port = 22
+  protocol = "tcp"
+  cidr_blocks = [
+    "0.0.0.0/0"
+  ]
+}
+
+resource "aws_security_group_rule" "allow_egress_ssh_allow_all" {
+  security_group_id = "${aws_security_group.ssh.id}"
   type = "egress"
   from_port = 0
   to_port = 0
