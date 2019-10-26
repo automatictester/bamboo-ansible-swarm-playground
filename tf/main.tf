@@ -17,3 +17,7 @@ module "bamboo" {
 module "networking" {
   source    = "./modules/networking"
 }
+
+module "swarm" {
+  source    = "./modules/swarm"
+}

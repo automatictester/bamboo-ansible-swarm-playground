@@ -1,0 +1,41 @@
+{
+  "variables": {
+    "swarm_vpc_id": "",
+    "swarm_subnet_id": ""
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "region": "eu-west-2",
+      "vpc_id": "{{user `swarm_vpc_id`}}",
+      "availability_zone": "eu-west-2a",
+      "subnet_id": "{{user `swarm_subnet_id`}}",
+      "source_ami": "ami-0be057a22c63962cb",
+      "instance_type": "t3a.micro",
+      "ssh_username": "ubuntu",
+      "ami_name": "swarm-{{isotime \"2006-01-02-15-04-05\"}}",
+      "tags": {
+        "Name": "Swarm Host"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "set -x",
+        "sudo apt-get update",
+        "sudo apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common",
+        "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -",
+        "sudo apt-key fingerprint 0EBFCD88",
+        "sudo add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"",
+        "sudo apt-get update",
+        "sudo apt-get install -y docker-ce docker-ce-cli containerd.io",
+        "sudo apt-get clean",
+        "sudo systemctl start docker",
+        "sudo systemctl enable docker",
+        "sudo usermod -aG docker $USER"
+      ]
+    }
+  ]
+}
