@@ -4,6 +4,7 @@ resource "aws_vpc" "bamboo_swarm_vpc" {
 
   tags {
     Name = "Bamboo and Swarm VPC"
+    Terraform = "BAS"
   }
 }
 
@@ -12,6 +13,7 @@ resource "aws_internet_gateway" "bamboo_swarm_vpc_gw" {
 
   tags {
     Name = "Bamboo and Swarm IGW"
+    Terraform = "BAS"
   }
 }
 
@@ -25,6 +27,7 @@ resource "aws_route_table" "bamboo_swarm_vpc_rt" {
 
   tags {
     Name = "Bamboo and Swarm RT"
+    Terraform = "BAS"
   }
 }
 
@@ -36,6 +39,7 @@ resource "aws_subnet" "bamboo_subnet" {
 
   tags {
     Name = "Bamboo Subnet"
+    Terraform = "BAS"
   }
 }
 
@@ -47,6 +51,7 @@ resource "aws_subnet" "swarm_subnet" {
 
   tags {
     Name = "Swarm Subnet"
+    Terraform = "BAS"
   }
 }
 
@@ -83,6 +88,7 @@ resource "aws_security_group" "bamboo_swarm" {
 
   tags {
     Name = "Full internal connectivity"
+    Terraform = "BAS"
   }
 }
 
@@ -93,6 +99,7 @@ resource "aws_security_group" "bamboo_http" {
 
   tags {
     Name = "Bamboo HTTP access"
+    Terraform = "BAS"
   }
 }
 
@@ -125,6 +132,7 @@ resource "aws_security_group" "ssh" {
 
   tags {
     Name = "SSH access"
+    Terraform = "BAS"
   }
 }
 
@@ -150,6 +158,37 @@ resource "aws_security_group_rule" "allow_egress_ssh_allow_all" {
   ]
 }
 
+resource "aws_security_group" "efs" {
+  name = "EFS access"
+  description = "Allow EFS access"
+  vpc_id = "${aws_vpc.bamboo_swarm_vpc.id}"
+
+  tags {
+    Name = "EFS access"
+    Terraform = "BAS"
+  }
+}
+
+resource "aws_security_group_rule" "allow_ingress_efs" {
+  security_group_id = "${aws_security_group.efs.id}"
+  type = "ingress"
+  from_port = 2049
+  to_port = 2049
+  protocol = "tcp"
+  source_security_group_id = "${aws_security_group.bamboo_http.id}"
+}
+
+resource "aws_security_group_rule" "allow_egress_efs_allow_all" {
+  security_group_id = "${aws_security_group.efs.id}"
+  type = "egress"
+  from_port = 0
+  to_port = 0
+  protocol = "-1"
+  cidr_blocks = [
+    "0.0.0.0/0"
+  ]
+}
+
 resource "aws_efs_file_system" "bamboo_home" {
   performance_mode = "generalPurpose"
   throughput_mode = "bursting"
@@ -160,10 +199,15 @@ resource "aws_efs_file_system" "bamboo_home" {
 
   tags = {
     Name = "Bamboo Home"
+    Terraform = "BAS"
   }
 }
 
 resource "aws_efs_mount_target" "alpha" {
   file_system_id = "${aws_efs_file_system.bamboo_home.id}"
   subnet_id = "${aws_subnet.bamboo_subnet.id}"
+
+  security_groups = [
+    "${aws_security_group.efs.id}"
+  ]
 }
