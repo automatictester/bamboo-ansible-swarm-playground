@@ -17,7 +17,3 @@ module "bamboo" {
 module "networking" {
   source    = "./modules/networking"
 }
-
-module "packer" {
-  source    = "./modules/packer"
-}

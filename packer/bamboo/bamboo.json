@@ -1,0 +1,63 @@
+{
+  "variables": {
+    "efs_filesystem_id": "",
+    "bamboo_vpc_id": "",
+    "bamboo_subnet_id": "",
+    "bamboo_http_access_sg_id": "",
+    "bamboo_ssh_access_sg_id": ""
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "region": "eu-west-2",
+      "vpc_id": "{{user `bamboo_vpc_id`}}",
+      "availability_zone": "eu-west-2a",
+      "subnet_id": "{{user `bamboo_subnet_id`}}",
+      "source_ami": "ami-00a1270ce1e007c27",
+      "instance_type": "t2.small",
+      "ssh_username": "ec2-user",
+      "ami_name": "bamboo-{{isotime \"2006-01-02-15-04-05\"}}",
+      "security_group_ids" : [
+        "{{user `bamboo_http_access_sg_id`}}",
+        "{{user `bamboo_ssh_access_sg_id`}}"
+      ],
+      "tags": {
+        "Name": "Bamboo"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "./bamboo.service",
+      "destination": "/home/ec2-user/bamboo.service"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo mv bamboo.service /etc/systemd/system/",
+        "set -x",
+        "sudo yum update -y",
+        "sudo yum install -y amazon-efs-utils java-1.8.0-openjdk",
+        "sudo yum clean all -y",
+        "sudo rm -rf /var/cache/yum",
+        "sudo mkdir /var/bamboo-home",
+        "sudo mount -t efs {{user `efs_filesystem_id`}}:/ /var/bamboo-home",
+        "sudo sh -c \"echo '{{user `efs_filesystem_id`}}:/ /var/bamboo-home efs defaults,_netdev,nofail 0 0' >> /etc/fstab\"",
+        "sudo useradd --create-home -c \"Bamboo role account\" bamboo",
+        "sudo chown bamboo: /var/bamboo-home/",
+        "sudo mkdir -p /opt/atlassian/bamboo",
+        "sudo chown bamboo: /opt/atlassian/bamboo",
+        "cd /opt/atlassian/bamboo",
+        "sudo wget https://www.atlassian.com/software/bamboo/downloads/binary/atlassian-bamboo-6.10.2.tar.gz -O /opt/atlassian/bamboo/atlassian-bamboo.tar.gz",
+        "sudo tar xf /opt/atlassian/bamboo/atlassian-bamboo.tar.gz",
+        "sudo rm /opt/atlassian/bamboo/atlassian-bamboo.tar.gz",
+        "sudo ln -s /opt/atlassian/bamboo/atlassian-bamboo-6.10.2/ /opt/atlassian/bamboo/current",
+        "sudo sh -c \"echo 'bamboo.home=/var/bamboo-home' > /opt/atlassian/bamboo/current/atlassian-bamboo/WEB-INF/classes/bamboo-init.properties\"",
+        "sudo chown -R bamboo /opt/atlassian/bamboo",
+        "sudo systemctl enable bamboo.service",
+        "if [ -f /etc/systemd/system/*.wants/bamboo.service ]; then echo \"On\"; else echo \"Off\"; fi"
+      ]
+    }
+  ]
+}
