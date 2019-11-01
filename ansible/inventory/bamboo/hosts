@@ -1,9 +1,9 @@
 [swarm_managers]
-10.1.0.21
+10.1.0.29
 
 [swarm_workers]
 10.1.0.20
-10.1.0.28
+10.1.0.22
 
 [swarm_cluster:children]
 swarm_managers
