@@ -211,3 +211,8 @@ resource "aws_efs_mount_target" "alpha" {
     "${aws_security_group.efs.id}"
   ]
 }
+
+resource "aws_ecr_repository" "simple_app" {
+  name                 = "simple-app"
+  image_tag_mutability = "MUTABLE"
+}
