@@ -1,0 +1,13 @@
+[swarm_managers]
+10.1.0.21
+
+[swarm_workers]
+10.1.0.20
+10.1.0.28
+
+[swarm_cluster:children]
+swarm_managers
+swarm_workers
+
+[swarm_cluster:vars]
+ansible_user=ubuntu

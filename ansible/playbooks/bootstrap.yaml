@@ -1,0 +1,12 @@
+---
+- name: Install core tools
+  hosts: swarm_cluster
+  tasks:
+    - name: Install pip
+      become: yes
+      apt:
+        name: python-pip
+    - name: Install Python docker module
+      become: yes
+      pip:
+        name: docker

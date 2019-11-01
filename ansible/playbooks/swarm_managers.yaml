@@ -1,0 +1,12 @@
+---
+- name: Deploy swarm manager
+  hosts: swarm_managers
+  tasks:
+    - name: Leave swarm
+      docker_swarm:
+        state: absent
+        force: true
+    - name: Init swarm
+      docker_swarm:
+        state: present
+        advertise_addr: "{{ ansible_default_ipv4.address }}"

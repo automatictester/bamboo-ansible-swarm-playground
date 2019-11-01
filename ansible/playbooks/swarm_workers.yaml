@@ -1,0 +1,35 @@
+---
+- name: Get join token
+  hosts: swarm_managers[0]
+  tasks:
+    - name: Get swarm info
+      docker_swarm_info:
+      register: swarm_info
+    - name: Debug docker swarm worker join token
+      debug:
+        msg: "{{ swarm_info.swarm_facts.JoinTokens.Worker }}"
+    - name: Debug swarm manager ip address
+      debug:
+        msg: "{{ ansible_default_ipv4.address }}"
+    - name: Set fact join_token
+      set_fact:
+        join_token: "{{ swarm_info.swarm_facts.JoinTokens.Worker }}"
+    - name: Set fact manager_ip_address
+      set_fact:
+        manager_ip_address: "{{ ansible_default_ipv4.address }}"
+
+- name: Join swarm
+  hosts: swarm_workers
+  tasks:
+    - name: Leave swarm
+      docker_swarm:
+        state: absent
+    - name: Join swarm
+      docker_swarm:
+        state: join
+        remote_addrs: "{{ hostvars[groups['swarm_managers'][0]]['manager_ip_address'] }}"
+        advertise_addr: "{{ ansible_default_ipv4.address }}"
+        join_token: "{{ hostvars[groups['swarm_managers'][0]]['join_token'] }}"
+      register: join_output
+    - name: Debug join_output
+      debug: var=join_output
