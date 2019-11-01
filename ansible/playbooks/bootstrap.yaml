@@ -5,6 +5,7 @@
     - name: Install pip
       become: yes
       apt:
+        update_cache: true
         name: python-pip
     - name: Install Python docker module
       become: yes
