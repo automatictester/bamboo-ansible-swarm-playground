@@ -1,3 +1,5 @@
 .idea/
 .terraform/
 ansible/inventory/workstation/
+simple-app/target/
+*.iml
