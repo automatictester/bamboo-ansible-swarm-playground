@@ -1,0 +1,9 @@
+---
+- name: Test deployment
+  hosts: swarm_cluster
+  tasks:
+    - shell: curl localhost:8080
+      args:
+        warn: false
+      register: response
+    - debug: msg="{{ response.stdout_lines }}"
