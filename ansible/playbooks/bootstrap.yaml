@@ -2,12 +2,17 @@
 - name: Install core tools
   hosts: swarm_cluster
   tasks:
-    - name: Install pip3
+    - name: Install apt-get packages
       become: yes
       apt:
         update_cache: true
-        name: python3-pip
-    - name: Install Python docker module
+        force_apt_get: yes
+        name:
+          - python3-pip
+          - awscli
+    - name: Install pip modules
       become: yes
       pip:
-        name: docker
+        name:
+          - docker
+          - boto3
