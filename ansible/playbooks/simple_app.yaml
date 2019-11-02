@@ -1,0 +1,28 @@
+---
+- name: Get docker image
+  hosts: swarm_cluster
+  tasks:
+    - name: ECR login
+      shell: $(aws ecr get-login --no-include-email --region eu-west-2)
+    - name: Get aws account
+      aws_caller_facts:
+      register: aws_details
+    - name: Debug aws account
+      debug:
+        msg: "{{ aws_details.account }}"
+    - name: Pull docker image
+      docker_image:
+        name: "{{ aws_details.account }}.dkr.ecr.eu-west-2.amazonaws.com/simple-app:latest"
+        source: pull
+
+- name: Create a service
+  hosts: swarm_managers[0]
+  tasks:
+    - name: Create service
+      docker_swarm_service:
+        name: simple-app
+        image: "{{ aws_details.account }}.dkr.ecr.eu-west-2.amazonaws.com/simple-app:latest"
+        replicas: 3
+        publish:
+          - published_port: 8080
+            target_port: 8080
