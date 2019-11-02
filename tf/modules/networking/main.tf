@@ -215,6 +215,9 @@ resource "aws_efs_mount_target" "alpha" {
 resource "aws_ecr_repository" "simple_app" {
   name                 = "simple-app"
   image_tag_mutability = "MUTABLE"
+  tags = {
+    Terraform = "BAS"
+  }
 }
 
 resource "aws_ecr_lifecycle_policy" "expire_untagged" {
