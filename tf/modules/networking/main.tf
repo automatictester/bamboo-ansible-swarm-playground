@@ -77,19 +77,32 @@ resource "aws_security_group" "bamboo_swarm" {
     self = true
   }
 
-  egress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
-    cidr_blocks = [
-      "0.0.0.0/0"
-    ]
-  }
-
   tags {
     Name = "Full internal connectivity"
     Terraform = "BAS"
   }
+}
+
+resource "aws_security_group" "egress" {
+  name = "Full egress"
+  description = "Full egress"
+  vpc_id = "${aws_vpc.bamboo_swarm_vpc.id}"
+
+  tags {
+    Name = "Full egress"
+    Terraform = "BAS"
+  }
+}
+
+resource "aws_security_group_rule" "allow_egress" {
+  security_group_id = "${aws_security_group.egress.id}"
+  type = "egress"
+  from_port = 0
+  to_port = 0
+  protocol = "-1"
+  cidr_blocks = [
+    "0.0.0.0/0"
+  ]
 }
 
 resource "aws_security_group" "bamboo_http" {
@@ -109,17 +122,6 @@ resource "aws_security_group_rule" "allow_ingress_8085" {
   from_port = 8085
   to_port = 8085
   protocol = "tcp"
-  cidr_blocks = [
-    "0.0.0.0/0"
-  ]
-}
-
-resource "aws_security_group_rule" "allow_egress_bamboo_http_allow_all" {
-  security_group_id = "${aws_security_group.bamboo_http.id}"
-  type = "egress"
-  from_port = 0
-  to_port = 0
-  protocol = "-1"
   cidr_blocks = [
     "0.0.0.0/0"
   ]
@@ -169,17 +171,6 @@ resource "aws_security_group_rule" "allow_ingress_ssh" {
   ]
 }
 
-resource "aws_security_group_rule" "allow_egress_ssh_allow_all" {
-  security_group_id = "${aws_security_group.ssh.id}"
-  type = "egress"
-  from_port = 0
-  to_port = 0
-  protocol = "-1"
-  cidr_blocks = [
-    "0.0.0.0/0"
-  ]
-}
-
 resource "aws_security_group" "efs" {
   name = "EFS access"
   description = "Allow EFS access"
@@ -198,17 +189,6 @@ resource "aws_security_group_rule" "allow_ingress_efs" {
   to_port = 2049
   protocol = "tcp"
   source_security_group_id = "${aws_security_group.bamboo_http.id}"
-}
-
-resource "aws_security_group_rule" "allow_egress_efs_allow_all" {
-  security_group_id = "${aws_security_group.efs.id}"
-  type = "egress"
-  from_port = 0
-  to_port = 0
-  protocol = "-1"
-  cidr_blocks = [
-    "0.0.0.0/0"
-  ]
 }
 
 resource "aws_efs_file_system" "bamboo_home" {
