@@ -125,6 +125,28 @@ resource "aws_security_group_rule" "allow_egress_bamboo_http_allow_all" {
   ]
 }
 
+resource "aws_security_group" "swarm_http" {
+  name = "Swarm service HTTP access"
+  description = "Swarm service HTTP access"
+  vpc_id = "${aws_vpc.bamboo_swarm_vpc.id}"
+
+  tags {
+    Name = "Swarm service HTTP access"
+    Terraform = "BAS"
+  }
+}
+
+resource "aws_security_group_rule" "allow_ingress_8080" {
+  security_group_id = "${aws_security_group.swarm_http.id}"
+  type = "ingress"
+  from_port = 8080
+  to_port = 8080
+  protocol = "tcp"
+  cidr_blocks = [
+    "0.0.0.0/0"
+  ]
+}
+
 resource "aws_security_group" "ssh" {
   name = "SSH access"
   description = "Allow SSH access"
