@@ -14,6 +14,7 @@
       docker_image:
         name: "{{ aws_details.account }}.dkr.ecr.eu-west-2.amazonaws.com/simple-app:1.0.1-snapshot"
         source: pull
+        force_source: true
 
 - name: Create a service
   hosts: swarm_managers[0]
