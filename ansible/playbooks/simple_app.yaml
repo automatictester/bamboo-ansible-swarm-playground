@@ -23,6 +23,7 @@
       docker_swarm_service:
         name: simple-app
         image: "{{ aws_details.account }}.dkr.ecr.eu-west-2.amazonaws.com/simple-app:1.0.1-snapshot"
+        force_update: true
         replicas: 3
         publish:
           - published_port: 8080
