@@ -16,7 +16,15 @@
         source: pull
         force_source: true
 
-- name: Create a service
+- name: Remove service
+  hosts: swarm_managers[0]
+  tasks:
+    - name: Remove service
+      docker_swarm_service:
+        name: simple-app
+        state: absent
+
+- name: Create service
   hosts: swarm_managers[0]
   tasks:
     - name: Create service
