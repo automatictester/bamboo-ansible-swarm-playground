@@ -10,6 +10,7 @@
         name:
           - python3-pip
           - awscli
+          - git
     - name: Install pip modules
       become: yes
       pip:
