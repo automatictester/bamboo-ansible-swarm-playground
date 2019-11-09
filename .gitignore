@@ -2,3 +2,4 @@
 .terraform/
 ansible/inventory/workstation/
 *.iml
+id_rsa*

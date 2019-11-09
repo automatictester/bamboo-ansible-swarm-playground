@@ -33,6 +33,11 @@
       "destination": "/home/ec2-user/bamboo.service"
     },
     {
+      "type": "file",
+      "source": "./id_rsa_bamboo",
+      "destination": "/home/ec2-user/id_rsa"
+    },
+    {
       "type": "shell",
       "inline": [
         "set -x",
@@ -48,6 +53,10 @@
         "sudo mount -t efs {{user `efs_filesystem_id`}}:/ /var/bamboo-home",
         "sudo sh -c \"echo '{{user `efs_filesystem_id`}}:/ /var/bamboo-home efs defaults,_netdev,nofail 0 0' >> /etc/fstab\"",
         "sudo useradd --create-home -c \"Bamboo role account\" bamboo",
+        "sudo mkdir /home/bamboo/.ssh",
+        "sudo mv /home/ec2-user/id_rsa /home/bamboo/.ssh/id_rsa",
+        "sudo chmod 400 /home/bamboo/.ssh/id_rsa",
+        "sudo chown -R bamboo: /home/bamboo/.ssh/",
         "sudo usermod -a -G docker bamboo",
         "sudo chown bamboo: /var/bamboo-home/",
         "sudo mkdir -p /opt/atlassian/bamboo",
