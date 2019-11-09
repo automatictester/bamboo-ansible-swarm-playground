@@ -57,6 +57,8 @@
         "sudo mv /home/ec2-user/id_rsa /home/bamboo/.ssh/id_rsa",
         "sudo chmod 400 /home/bamboo/.ssh/id_rsa",
         "sudo chown -R bamboo: /home/bamboo/.ssh/",
+        "sudo echo -e \"[user]\\n\\tname = Bamboo\\n\\temail = bamboo.buildmaster@gmail.com\" > /home/bamboo/.gitconfig",
+        "sudo chown bamboo: /home/bamboo/.gitconfig",
         "sudo usermod -a -G docker bamboo",
         "sudo chown bamboo: /var/bamboo-home/",
         "sudo mkdir -p /opt/atlassian/bamboo",
