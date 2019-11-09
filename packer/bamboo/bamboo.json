@@ -38,7 +38,7 @@
         "set -x",
         "sudo mv bamboo.service /etc/systemd/system/",
         "sudo yum update -y",
-        "sudo yum install -y amazon-efs-utils java-1.8.0-openjdk maven",
+        "sudo yum install -y amazon-efs-utils java-1.8.0-openjdk maven git",
         "sudo amazon-linux-extras install ansible2 docker",
         "sudo systemctl start docker",
         "sudo systemctl enable docker",
