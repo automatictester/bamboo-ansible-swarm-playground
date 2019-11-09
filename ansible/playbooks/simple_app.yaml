@@ -9,7 +9,7 @@
       register: aws_details
     - name: Set fact image_name
       set_fact:
-        image_name: "{{ aws_details.account }}.dkr.ecr.eu-west-2.amazonaws.com/simple-app:{{ simple_app_version|lower }}"
+        image_name: "{{ aws_details.account }}.dkr.ecr.eu-west-2.amazonaws.com/simple-app:{{ simple_app_version }}"
     - name: Debug fact image_name
       debug:
         msg: "{{ image_name }}"
