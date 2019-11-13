@@ -19,7 +19,8 @@
         source: pull
 
 - name: Remove service
-  hosts: swarm_managers[0]
+  hosts: swarm_managers
+  run_once: true
   tasks:
     - name: Remove service
       docker_swarm_service:
@@ -27,7 +28,8 @@
         state: absent
 
 - name: Create service
-  hosts: swarm_managers[0]
+  hosts: swarm_managers
+  run_once: true
   tasks:
     - name: Create service
       docker_swarm_service:

@@ -1,6 +1,7 @@
 ---
 - name: Get join token
-  hosts: swarm_managers[0]
+  hosts: swarm_managers
+  run_once: true
   tasks:
     - name: Get swarm info
       docker_swarm_info:
