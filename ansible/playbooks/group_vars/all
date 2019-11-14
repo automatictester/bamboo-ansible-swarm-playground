@@ -1,0 +1,5 @@
+---
+aws:
+    region: eu-west-2
+app:
+    name: simple-app

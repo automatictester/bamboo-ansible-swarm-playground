@@ -3,13 +3,13 @@
   hosts: swarm_cluster
   tasks:
     - name: ECR login
-      shell: $(aws ecr get-login --no-include-email --region eu-west-2)
+      shell: $(aws ecr get-login --no-include-email --region {{ aws.region }})
     - name: Get aws account
       aws_caller_facts:
       register: aws_details
     - name: Set fact image_name
       set_fact:
-        image_name: "{{ aws_details.account }}.dkr.ecr.eu-west-2.amazonaws.com/simple-app:{{ simple_app_version }}"
+        image_name: "{{ aws_details.account }}.dkr.ecr.{{ aws.region }}.amazonaws.com/{{ app.name }}:{{ simple_app_version }}"
     - name: Debug fact image_name
       debug: var=image_name
     - name: Pull docker image
@@ -23,7 +23,7 @@
   tasks:
     - name: Remove service
       docker_swarm_service:
-        name: simple-app
+        name: "{{ app.name }}"
         state: absent
 
 - name: Create service
@@ -32,7 +32,7 @@
   tasks:
     - name: Create service
       docker_swarm_service:
-        name: simple-app
+        name: "{{ app.name }}"
         image: "{{ image_name }}"
         replicas: 3
         publish:
