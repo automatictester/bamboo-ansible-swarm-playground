@@ -240,18 +240,7 @@ resource "aws_ecr_lifecycle_policy" "expire_untagged" {
             "action": {
                 "type": "expire"
             }
-        }
-    ]
-}
-EOF
-}
-
-resource "aws_ecr_lifecycle_policy" "expire_tagged" {
-  repository = "${aws_ecr_repository.simple_app.name}"
-
-  policy = <<EOF
-{
-    "rules": [
+        },
         {
             "rulePriority": 2,
             "description": "Expire images older than 7 days",
