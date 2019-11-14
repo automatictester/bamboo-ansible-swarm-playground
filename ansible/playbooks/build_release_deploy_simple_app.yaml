@@ -11,8 +11,7 @@
       set_fact:
         image_name: "{{ aws_details.account }}.dkr.ecr.eu-west-2.amazonaws.com/simple-app:{{ simple_app_version }}"
     - name: Debug fact image_name
-      debug:
-        msg: "{{ image_name }}"
+      debug: var=image_name
     - name: Pull docker image
       docker_image:
         name: "{{ image_name }}"

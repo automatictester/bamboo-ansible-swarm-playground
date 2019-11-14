@@ -7,11 +7,9 @@
       docker_swarm_info:
       register: swarm_info
     - name: Debug docker swarm worker join token
-      debug:
-        msg: "{{ swarm_info.swarm_facts.JoinTokens.Worker }}"
+      debug: var=swarm_info.swarm_facts.JoinTokens.Worker
     - name: Debug swarm manager ip address
-      debug:
-        msg: "{{ ansible_default_ipv4.address }}"
+      debug: var=ansible_default_ipv4.address
     - name: Set fact join_token
       set_fact:
         join_token: "{{ swarm_info.swarm_facts.JoinTokens.Worker }}"
