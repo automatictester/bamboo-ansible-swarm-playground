@@ -3,3 +3,6 @@
 ansible/inventory/workstation/
 *.iml
 id_rsa*
+bamboo-specs/target/
+bamboo.properties
+.credentials
