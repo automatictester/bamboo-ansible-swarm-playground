@@ -1,6 +1,6 @@
 package uk.co.automatictester.bas.specs;
 
-import uk.co.automatictester.bas.specs.plan.config.BootstrapSwarmHostsPlanConfig;
+import uk.co.automatictester.bas.specs.config.BootstrapSwarmHostsPlanConfig;
 
 import java.util.Arrays;
 import java.util.List;

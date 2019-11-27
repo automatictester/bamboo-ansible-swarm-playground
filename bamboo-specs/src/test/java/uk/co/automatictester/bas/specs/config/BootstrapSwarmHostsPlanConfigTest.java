@@ -1,4 +1,4 @@
-package uk.co.automatictester.bas.specs.plan.config;
+package uk.co.automatictester.bas.specs.config;
 
 import com.atlassian.bamboo.specs.api.builders.permission.PlanPermissions;
 import com.atlassian.bamboo.specs.api.builders.plan.Plan;

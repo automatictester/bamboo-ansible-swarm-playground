@@ -1,4 +1,4 @@
-package uk.co.automatictester.bas.specs.plan.config;
+package uk.co.automatictester.bas.specs.config;
 
 import com.atlassian.bamboo.specs.api.builders.BambooKey;
 import com.atlassian.bamboo.specs.api.builders.plan.Job;
@@ -13,6 +13,7 @@ import com.atlassian.bamboo.specs.builders.task.CheckoutItem;
 import com.atlassian.bamboo.specs.builders.task.ScriptTask;
 import com.atlassian.bamboo.specs.builders.task.VcsCheckoutTask;
 import uk.co.automatictester.bas.specs.ParentPlanConfig;
+import uk.co.automatictester.bas.specs.ResourceReader;
 
 public class BootstrapSwarmHostsPlanConfig extends ParentPlanConfig {
 
@@ -27,7 +28,7 @@ public class BootstrapSwarmHostsPlanConfig extends ParentPlanConfig {
                                                 .cleanCheckout(true),
                                         new ScriptTask()
                                                 .description("Run Ansible playbook")
-                                                .inlineBody("ansible-playbook \\\n    -i inventory/bamboo/hosts \\\n    playbooks/bootstrap_swarm_hosts.yaml")
+                                                .inlineBody(ResourceReader.loadAsString("/scripts/bootstrap_swarm_hosts.sh"))
                                                 .workingSubdirectory("ansible"))))
                 .planRepositories(new GitRepository()
                         .name("bamboo-ansible-swarm-playground")
