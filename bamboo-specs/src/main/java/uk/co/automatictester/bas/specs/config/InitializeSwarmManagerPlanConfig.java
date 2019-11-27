@@ -15,11 +15,11 @@ import com.atlassian.bamboo.specs.builders.task.VcsCheckoutTask;
 import uk.co.automatictester.bas.specs.ParentPlanConfig;
 import uk.co.automatictester.bas.specs.ResourceReader;
 
-public class BootstrapSwarmHostsPlanConfig extends ParentPlanConfig {
+public class InitializeSwarmManagerPlanConfig extends ParentPlanConfig {
 
     @Override
     public Plan getPlan() {
-        return new Plan(new Project().name(PROJECT_NAME).key(getProjectKey()).description(DEFAULT_DESCRIPTION), "Bootstrap Swarm hosts", getPlanKey()).description(DEFAULT_DESCRIPTION)
+        return new Plan(new Project().name(PROJECT_NAME).key(getProjectKey()).description(DEFAULT_DESCRIPTION), "Initialize Swarm manager", getPlanKey()).description(DEFAULT_DESCRIPTION)
                 .stages(new Stage("Default Stage")
                         .jobs(new Job("Default Job", new BambooKey("JOB1"))
                                 .tasks(new VcsCheckoutTask()
@@ -28,7 +28,7 @@ public class BootstrapSwarmHostsPlanConfig extends ParentPlanConfig {
                                                 .cleanCheckout(true),
                                         new ScriptTask()
                                                 .description("Run Ansible playbook")
-                                                .inlineBody(ResourceReader.loadAsString("/scripts/bootstrap_swarm_hosts.sh"))
+                                                .inlineBody(ResourceReader.loadAsString("/scripts/initialize_swarm_manager.sh"))
                                                 .workingSubdirectory("ansible"))))
                 .planRepositories(new GitRepository()
                         .name("bamboo-ansible-swarm-playground")
@@ -41,6 +41,6 @@ public class BootstrapSwarmHostsPlanConfig extends ParentPlanConfig {
 
     @Override
     public BambooKey getPlanKey() {
-        return new BambooKey("AN");
+        return new BambooKey("PSM");
     }
 }

@@ -15,25 +15,16 @@ import com.atlassian.bamboo.specs.builders.task.VcsCheckoutTask;
 import uk.co.automatictester.bas.specs.ParentPlanConfig;
 import uk.co.automatictester.bas.specs.ResourceReader;
 
-public class BootstrapSwarmHostsPlanConfig extends ParentPlanConfig {
+public class TestSimpleAppPlanConfig extends ParentPlanConfig {
 
     @Override
     public Plan getPlan() {
-        return new Plan(new Project().name(PROJECT_NAME).key(getProjectKey()).description(DEFAULT_DESCRIPTION), "Bootstrap Swarm hosts", getPlanKey()).description(DEFAULT_DESCRIPTION)
+        return new Plan(new Project().name(PROJECT_NAME).key(getProjectKey()).description(DEFAULT_DESCRIPTION), "Test simple-app", getPlanKey()).description(DEFAULT_DESCRIPTION)
                 .stages(new Stage("Default Stage")
                         .jobs(new Job("Default Job", new BambooKey("JOB1"))
-                                .tasks(new VcsCheckoutTask()
-                                                .description("Git clone")
-                                                .checkoutItems(new CheckoutItem().defaultRepository())
-                                                .cleanCheckout(true),
-                                        new ScriptTask()
-                                                .description("Run Ansible playbook")
-                                                .inlineBody(ResourceReader.loadAsString("/scripts/bootstrap_swarm_hosts.sh"))
-                                                .workingSubdirectory("ansible"))))
-                .planRepositories(new GitRepository()
-                        .name("bamboo-ansible-swarm-playground")
-                        .url("https://github.com/automatictester/bamboo-ansible-swarm-playground.git")
-                        .repositoryViewer(new GitHubRepositoryViewer()))
+                                .tasks(new ScriptTask()
+                                                .description("Call app")
+                                                .inlineBody(ResourceReader.loadAsString("/scripts/test_simple_app.sh")))))
                 .planBranchManagement(new PlanBranchManagement()
                         .delete(new BranchCleanup())
                         .notificationForCommitters());
@@ -41,6 +32,6 @@ public class BootstrapSwarmHostsPlanConfig extends ParentPlanConfig {
 
     @Override
     public BambooKey getPlanKey() {
-        return new BambooKey("AN");
+        return new BambooKey("TS");
     }
 }
