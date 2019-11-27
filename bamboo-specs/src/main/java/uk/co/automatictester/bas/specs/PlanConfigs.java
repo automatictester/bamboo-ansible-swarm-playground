@@ -10,7 +10,7 @@ import java.util.List;
 
 public class PlanConfigs {
 
-    public static List<ParentPlanConfig> getAll() {
+    public static List<PlanConfig> getAll() {
         return Arrays.asList(
                 new BootstrapSwarmHostsPlanConfig(),
                 new InitializeSwarmManagerPlanConfig(),

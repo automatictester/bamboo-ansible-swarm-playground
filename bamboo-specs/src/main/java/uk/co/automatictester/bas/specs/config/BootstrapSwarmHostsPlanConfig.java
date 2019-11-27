@@ -12,10 +12,10 @@ import com.atlassian.bamboo.specs.builders.repository.viewer.GitHubRepositoryVie
 import com.atlassian.bamboo.specs.builders.task.CheckoutItem;
 import com.atlassian.bamboo.specs.builders.task.ScriptTask;
 import com.atlassian.bamboo.specs.builders.task.VcsCheckoutTask;
-import uk.co.automatictester.bas.specs.ParentPlanConfig;
+import uk.co.automatictester.bas.specs.PlanConfig;
 import uk.co.automatictester.bas.specs.ResourceReader;
 
-public class BootstrapSwarmHostsPlanConfig extends ParentPlanConfig {
+public class BootstrapSwarmHostsPlanConfig extends PlanConfig {
 
     @Override
     public Plan getPlan() {

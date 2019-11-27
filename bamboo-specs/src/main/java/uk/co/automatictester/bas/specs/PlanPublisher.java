@@ -9,7 +9,7 @@ public class PlanPublisher {
     public static void main(String[] args) {
         String serverUrl = ServerConfig.getServerUrl();
         BambooServer server = new BambooServer(serverUrl);
-        for (ParentPlanConfig planConfig : PlanConfigs.getAll()) {
+        for (PlanConfig planConfig : PlanConfigs.getAll()) {
             server.publish(planConfig.getPlan());
             server.publish(planConfig.getPermissions());
         }
