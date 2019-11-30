@@ -22,9 +22,11 @@ import uk.co.automatictester.bas.specs.PlanConfig;
 import uk.co.automatictester.bas.specs.ResourceReader;
 import uk.co.automatictester.bas.specs.ServerConfig;
 
+import static uk.co.automatictester.bas.specs.Environment.DEV;
+
 public class SimpleAppPlanConfig extends PlanConfig {
 
-    private static final String DEPLOYMENT_PLAN_NAME = "Deploy simple-app to Swarm";
+    private static final String DEPLOYMENT_PLAN_NAME = "Deploy simple-app to Docker Swarm";
 
     @Override
     public Plan getPlan() {
@@ -67,7 +69,7 @@ public class SimpleAppPlanConfig extends PlanConfig {
     public Deployment getDeploymentPlan() {
         return new Deployment(new PlanIdentifier(getProjectKey(), getPlanKey()), DEPLOYMENT_PLAN_NAME)
                 .releaseNaming(new ReleaseNaming("${bamboo.release.version}"))
-                .environments(new Environment("dev")
+                .environments(new Environment(DEV.toString())
                         .tasks(new CleanWorkingDirectoryTask(),
                                 new ScriptTask()
                                         .description("Get Ansible scripts")
@@ -95,14 +97,13 @@ public class SimpleAppPlanConfig extends PlanConfig {
     }
 
     public DeploymentPermissions getDeploymentPermission() {
-        return new DeploymentPermissions(DEPLOYMENT_PLAN_NAME).permissions(
-                new Permissions().userPermissions(
-                        ServerConfig.getAdminUser(), PermissionType.EDIT, PermissionType.VIEW));
+        return new DeploymentPermissions(DEPLOYMENT_PLAN_NAME)
+                .permissions(new Permissions().userPermissions(ServerConfig.getAdminUser(), PermissionType.EDIT, PermissionType.VIEW));
     }
 
     public EnvironmentPermissions getEnvironmentPermission() {
-        return new EnvironmentPermissions(DEPLOYMENT_PLAN_NAME).environmentName("dev").permissions(
-                new Permissions().userPermissions(
-                        ServerConfig.getAdminUser(), PermissionType.EDIT, PermissionType.VIEW, PermissionType.BUILD));
+        return new EnvironmentPermissions(DEPLOYMENT_PLAN_NAME)
+                .environmentName(DEV.toString())
+                .permissions(new Permissions().userPermissions(ServerConfig.getAdminUser(), PermissionType.EDIT, PermissionType.VIEW, PermissionType.BUILD));
     }
 }
