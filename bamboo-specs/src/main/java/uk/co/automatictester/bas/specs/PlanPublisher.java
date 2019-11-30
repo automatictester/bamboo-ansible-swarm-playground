@@ -12,6 +12,11 @@ public class PlanPublisher {
         for (PlanConfig planConfig : PlanConfigs.getAll()) {
             server.publish(planConfig.getPlan());
             server.publish(planConfig.getPermissions());
+            if (planConfig.hasDeploymentPlan()) {
+                server.publish(planConfig.getDeploymentPlan());
+                server.publish(planConfig.getDeploymentPermission());
+                server.publish(planConfig.getEnvironmentPermission());
+            }
         }
     }
 }

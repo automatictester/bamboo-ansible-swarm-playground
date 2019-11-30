@@ -11,8 +11,10 @@ public class TestSimpleAppPlanConfigTest {
     @Test
     public void checkPlanConfig() {
         PlanConfig planConfig = new TestSimpleAppPlanConfig();
+
         Plan plan = planConfig.getPlan();
         PlanPermissions planPermissions = planConfig.getPermissions();
+
         EntityPropertiesBuilders.build(plan);
         EntityPropertiesBuilders.build(planPermissions);
     }

@@ -11,8 +11,10 @@ public class InitializeSwarmManagerPlanConfigTest {
     @Test
     public void checkPlanConfig() {
         PlanConfig planConfig = new InitializeSwarmManagerPlanConfig();
+
         Plan plan = planConfig.getPlan();
         PlanPermissions planPermissions = planConfig.getPermissions();
+
         EntityPropertiesBuilders.build(plan);
         EntityPropertiesBuilders.build(planPermissions);
     }

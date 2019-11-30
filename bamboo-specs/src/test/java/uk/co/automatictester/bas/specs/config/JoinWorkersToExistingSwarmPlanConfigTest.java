@@ -11,8 +11,10 @@ public class JoinWorkersToExistingSwarmPlanConfigTest {
     @Test
     public void checkPlanConfig() {
         PlanConfig planConfig = new JoinWorkersToExistingSwarmPlanConfig();
+
         Plan plan = planConfig.getPlan();
         PlanPermissions planPermissions = planConfig.getPermissions();
+
         EntityPropertiesBuilders.build(plan);
         EntityPropertiesBuilders.build(planPermissions);
     }

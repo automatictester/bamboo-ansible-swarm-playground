@@ -1,9 +1,6 @@
 package uk.co.automatictester.bas.specs;
 
-import uk.co.automatictester.bas.specs.config.BootstrapSwarmHostsPlanConfig;
-import uk.co.automatictester.bas.specs.config.InitializeSwarmManagerPlanConfig;
-import uk.co.automatictester.bas.specs.config.JoinWorkersToExistingSwarmPlanConfig;
-import uk.co.automatictester.bas.specs.config.TestSimpleAppPlanConfig;
+import uk.co.automatictester.bas.specs.config.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,7 +12,8 @@ public class PlanConfigs {
                 new BootstrapSwarmHostsPlanConfig(),
                 new InitializeSwarmManagerPlanConfig(),
                 new JoinWorkersToExistingSwarmPlanConfig(),
-                new TestSimpleAppPlanConfig()
+                new TestSimpleAppPlanConfig(),
+                new SimpleAppPlanConfig()
         );
     }
 }
