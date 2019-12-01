@@ -1,9 +1,12 @@
 package uk.co.automatictester.bas.specs;
 
 import com.atlassian.bamboo.specs.api.builders.BambooKey;
-import com.atlassian.bamboo.specs.api.builders.deployment.Deployment;
-import com.atlassian.bamboo.specs.api.builders.permission.*;
+import com.atlassian.bamboo.specs.api.builders.permission.PermissionType;
+import com.atlassian.bamboo.specs.api.builders.permission.Permissions;
+import com.atlassian.bamboo.specs.api.builders.permission.PlanPermissions;
 import com.atlassian.bamboo.specs.api.builders.plan.Plan;
+
+import java.util.Optional;
 
 public abstract class PlanConfig {
 
@@ -18,20 +21,8 @@ public abstract class PlanConfig {
         return new BambooKey("SWAR");
     }
 
-    public boolean hasDeploymentPlan() {
-        return false;
-    }
-
-    public Deployment getDeploymentPlan() {
-        throw new RuntimeException("This build plan has no deployment plans");
-    }
-
-    public DeploymentPermissions getDeploymentPermission() {
-        throw new RuntimeException("This build plan has no deployment permission");
-    }
-
-    public EnvironmentPermissions getEnvironmentPermission() {
-        throw new RuntimeException("This build plan has no environment permission");
+    public Optional<DeploymentConfig> getDeploymentConfig() {
+        return Optional.empty();
     }
 
     public PlanPermissions getPermissions() {

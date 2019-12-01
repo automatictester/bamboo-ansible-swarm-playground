@@ -1,5 +1,6 @@
 package uk.co.automatictester.bas.specs.config;
 
+import com.atlassian.bamboo.specs.api.builders.deployment.Deployment;
 import com.atlassian.bamboo.specs.api.builders.permission.DeploymentPermissions;
 import com.atlassian.bamboo.specs.api.builders.permission.EnvironmentPermissions;
 import com.atlassian.bamboo.specs.api.builders.permission.PlanPermissions;
@@ -16,11 +17,13 @@ public class SimpleAppPlanConfigTest {
 
         Plan plan = planConfig.getPlan();
         PlanPermissions planPermissions = planConfig.getPermissions();
-        DeploymentPermissions deploymentPermissions = planConfig.getDeploymentPermission();
-        EnvironmentPermissions environmentPermissions = planConfig.getEnvironmentPermission();
+        Deployment deploymentPlan = planConfig.getDeploymentConfig().get().getDeploymentPlan();
+        DeploymentPermissions deploymentPermissions = planConfig.getDeploymentConfig().get().getDeploymentPermissions();
+        EnvironmentPermissions environmentPermissions = planConfig.getDeploymentConfig().get().getEnvironmentPermissions();
 
         EntityPropertiesBuilders.build(plan);
         EntityPropertiesBuilders.build(planPermissions);
+        EntityPropertiesBuilders.build(deploymentPlan);
         EntityPropertiesBuilders.build(deploymentPermissions);
         EntityPropertiesBuilders.build(environmentPermissions);
     }
