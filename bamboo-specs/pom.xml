@@ -10,7 +10,7 @@
    </parent>
 
    <groupId>uk.co.automatictester</groupId>
-   <artifactId>bas-bamboo-specs</artifactId>
+   <artifactId>bamboo-specs</artifactId>
    <version>1.0.0-SNAPSHOT</version>
    <packaging>jar</packaging>
 
