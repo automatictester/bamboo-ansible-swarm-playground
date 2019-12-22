@@ -29,6 +29,8 @@
         publish:
           - published_port: 8080
             target_port: 8080
+        update_config:
+          parallelism: 3
 
 - name: Cleanup
   hosts: swarm_cluster
