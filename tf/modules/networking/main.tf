@@ -65,22 +65,60 @@ resource "aws_route_table_association" "rt_association_swarm_subnet" {
   route_table_id = "${aws_route_table.bamboo_swarm_vpc_rt.id}"
 }
 
-resource "aws_security_group" "bamboo_swarm" {
-  name = "Full internal connectivity"
-  description = "Allow full internal connectivity between instances"
+resource "aws_security_group" "swarm_node" {
+  name = "Swarm node"
+  description = "Swarm node"
   vpc_id = "${aws_vpc.bamboo_swarm_vpc.id}"
 
-  ingress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
-    self = true
-  }
-
   tags {
-    Name = "Full internal connectivity"
+    Name = "Swarm node"
     Terraform = "BAS"
   }
+}
+
+resource "aws_security_group_rule" "2377_tcp" {
+  security_group_id = "${aws_security_group.swarm_node.id}"
+  type = "ingress"
+  from_port = 2377
+  to_port = 2377
+  protocol = "tcp"
+  self = true
+}
+
+resource "aws_security_group_rule" "7946_tcp" {
+  security_group_id = "${aws_security_group.swarm_node.id}"
+  type = "ingress"
+  from_port = 7946
+  to_port = 7946
+  protocol = "tcp"
+  self = true
+}
+
+resource "aws_security_group_rule" "7946_udp" {
+  security_group_id = "${aws_security_group.swarm_node.id}"
+  type = "ingress"
+  from_port = 7946
+  to_port = 7946
+  protocol = "udp"
+  self = true
+}
+
+resource "aws_security_group_rule" "4789_udp" {
+  security_group_id = "${aws_security_group.swarm_node.id}"
+  type = "ingress"
+  from_port = 4789
+  to_port = 4789
+  protocol = "udp"
+  self = true
+}
+
+resource "aws_security_group_rule" "50_all" {
+  security_group_id = "${aws_security_group.swarm_node.id}"
+  type = "ingress"
+  from_port = 50
+  to_port = 50
+  protocol = "all"
+  self = true
 }
 
 resource "aws_security_group" "egress" {
