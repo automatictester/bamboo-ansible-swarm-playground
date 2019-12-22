@@ -12,15 +12,10 @@
         image_name: "{{ aws_details.account }}.dkr.ecr.{{ aws.region }}.amazonaws.com/{{ app.name }}:{{ simple_app_version }}"
     - name: Debug fact image_name
       debug: var=image_name
-
-- name: Remove service
-  hosts: swarm_managers
-  run_once: true
-  tasks:
-    - name: Remove service
-      docker_swarm_service:
-        name: "{{ app.name }}"
-        state: absent
+    - name: Pull docker image
+      docker_image:
+        name: "{{ image_name }}"
+        source: pull
 
 - name: Create service
   hosts: swarm_managers
@@ -30,8 +25,15 @@
       docker_swarm_service:
         name: "{{ app.name }}"
         image: "{{ image_name }}"
-        resolve_image: true
         replicas: 3
         publish:
           - published_port: 8080
             target_port: 8080
+
+- name: Cleanup
+  hosts: swarm_cluster
+  tasks:
+    - name: Cleanup containers
+      shell: docker container prune --force
+    - name: Cleanup images
+      shell: docker image prune --all --force
