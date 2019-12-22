@@ -13,7 +13,8 @@ public class PlanConfigs {
                 new InitializeSwarmManagerPlanConfig(),
                 new JoinWorkersToExistingSwarmPlanConfig(),
                 new TestSimpleAppPlanConfig(),
-                new SimpleAppPlanConfig()
+                new SimpleAppPlanConfig(),
+                new UpgradeDockerPlanConfig()
         );
     }
 }

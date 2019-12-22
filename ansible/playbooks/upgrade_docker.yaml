@@ -1,0 +1,46 @@
+---
+- name: Upgrade Docker
+  hosts: swarm_cluster
+  tasks:
+    - name: Stop Docker
+      become: yes
+      systemd:
+        name: docker
+        state: stopped
+    - name: Remove old packages
+      become: yes
+      apt:
+        update_cache: true
+        force_apt_get: yes
+        state: absent
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+    - name: Get Ubuntu version
+      shell: lsb_release -cs
+      register: ubuntu_version
+      changed_when: false
+    - name: Add repo
+      become: yes
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ubuntu_version.stdout }} stable"
+    - name: Install current Docker version
+      become: yes
+      apt:
+        update_cache: true
+        force_apt_get: yes
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+    - name: Cleanup
+      become: yes
+      shell: apt-get clean
+      args:
+        warn: false
+    - name: Check Docker version
+      shell: docker version
+      register: docker_version
+    - name: Print Docker version
+      debug: var=docker_version.stdout_lines
