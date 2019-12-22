@@ -112,15 +112,6 @@ resource "aws_security_group_rule" "4789_udp" {
   self = true
 }
 
-resource "aws_security_group_rule" "50_all" {
-  security_group_id = "${aws_security_group.swarm_node.id}"
-  type = "ingress"
-  from_port = 50
-  to_port = 50
-  protocol = "all"
-  self = true
-}
-
 resource "aws_security_group" "egress" {
   name = "Full egress"
   description = "Full egress"
