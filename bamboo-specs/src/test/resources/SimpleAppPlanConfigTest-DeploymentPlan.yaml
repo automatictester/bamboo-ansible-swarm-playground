@@ -1,0 +1,105 @@
+--- !!com.atlassian.bamboo.specs.util.BambooSpecProperties
+rootEntity: !!com.atlassian.bamboo.specs.api.model.deployment.DeploymentProperties
+  description: null
+  environments:
+  - description: null
+    dockerConfiguration:
+      enabled: false
+      image: null
+      volumes: {}
+    finalTasks: []
+    name: DEV
+    notifications: []
+    pluginConfigurations: []
+    requirements: []
+    tasks:
+    - !!com.atlassian.bamboo.specs.model.task.CleanWorkingDirectoryTaskProperties
+      conditions: []
+      description: ''
+      enabled: true
+      requirements: []
+    - !!com.atlassian.bamboo.specs.model.task.ScriptTaskProperties
+      conditions: []
+      description: Get Ansible scripts
+      enabled: true
+      requirements: []
+      argument: null
+      body: git clone https://github.com/automatictester/bamboo-ansible-swarm-playground.git
+        bas
+      environmentVariables: null
+      interpreter: SHELL
+      location: INLINE
+      path: null
+      workingSubdirectory: null
+    - !!com.atlassian.bamboo.specs.model.task.ArtifactDownloaderTaskProperties
+      conditions: []
+      description: Get version number from build plan
+      enabled: true
+      requirements: []
+      artifacts:
+      - allArtifacts: false
+        artifactName: version.properties
+        path: ''
+      sourcePlan: null
+    - !!com.atlassian.bamboo.specs.model.task.InjectVariablesTaskProperties
+      conditions: []
+      description: Get simple-app version
+      enabled: true
+      requirements: []
+      namespace: inject
+      path: version.properties
+      scope: LOCAL
+    - !!com.atlassian.bamboo.specs.model.task.ScriptTaskProperties
+      conditions: []
+      description: Deploy to Swarm
+      enabled: true
+      requirements: []
+      argument: null
+      body: |-
+        ansible-playbook \
+            -i ansible/inventory/bamboo/hosts \
+            ansible/playbooks/deploy_simple_app.yaml \
+            -e simple_app_version=${bamboo.inject.version}
+      environmentVariables: null
+      interpreter: SHELL
+      location: INLINE
+      path: null
+      workingSubdirectory: bas
+    - !!com.atlassian.bamboo.specs.model.task.ScriptTaskProperties
+      conditions: []
+      description: Call app
+      enabled: true
+      requirements: []
+      argument: null
+      body: |-
+        SWARM_HOST=10.1.0.20
+
+        sleep 5
+        for i in {1..10}
+        do
+            curl -s ${SWARM_HOST}:8080
+            echo -e "\n\n"
+        done
+      environmentVariables: null
+      interpreter: SHELL
+      location: INLINE
+      path: null
+      workingSubdirectory: null
+    triggers: []
+    variables: []
+  name: Deploy simple-app to Docker Swarm
+  oid: null
+  plan:
+    key:
+      key: SIM
+    oid: null
+    projectKey:
+      key: SWAR
+  releaseNaming:
+    applicableToBranches: false
+    autoIncrement: false
+    nextVersionName: ${bamboo.release.version}
+    variablesToAutoIncrement: !!set {}
+  repositoryStoredSpecsData: null
+specModelVersion: 6.10.2
+...

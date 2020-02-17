@@ -1,0 +1,24 @@
+--- !!com.atlassian.bamboo.specs.util.BambooSpecProperties
+rootEntity: !!com.atlassian.bamboo.specs.api.model.permission.PlanPermissionsProperties
+  permissions:
+    anonymousUserPermissions:
+      permissionTypes: []
+    groupPermissions: []
+    loggedInUserPermissions:
+      permissionTypes: []
+    userPermissions:
+    - permissionTypes:
+      - !!com.atlassian.bamboo.specs.api.builders.permission.PermissionType 'EDIT'
+      - !!com.atlassian.bamboo.specs.api.builders.permission.PermissionType 'VIEW'
+      - !!com.atlassian.bamboo.specs.api.builders.permission.PermissionType 'ADMIN'
+      - !!com.atlassian.bamboo.specs.api.builders.permission.PermissionType 'CLONE'
+      - !!com.atlassian.bamboo.specs.api.builders.permission.PermissionType 'BUILD'
+      username: irek
+  planIdentifier:
+    key:
+      key: AN
+    oid: null
+    projectKey:
+      key: SWAR
+specModelVersion: 6.10.2
+...

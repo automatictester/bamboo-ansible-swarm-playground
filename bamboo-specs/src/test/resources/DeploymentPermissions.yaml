@@ -1,0 +1,17 @@
+--- !!com.atlassian.bamboo.specs.util.BambooSpecProperties
+rootEntity: !!com.atlassian.bamboo.specs.api.model.permission.DeploymentPermissionsProperties
+  deploymentName: Deploy simple-app to Docker Swarm
+  deploymentOid: null
+  permissions:
+    anonymousUserPermissions:
+      permissionTypes: []
+    groupPermissions: []
+    loggedInUserPermissions:
+      permissionTypes: []
+    userPermissions:
+    - permissionTypes:
+      - !!com.atlassian.bamboo.specs.api.builders.permission.PermissionType 'EDIT'
+      - !!com.atlassian.bamboo.specs.api.builders.permission.PermissionType 'VIEW'
+      username: irek
+specModelVersion: 6.10.2
+...
